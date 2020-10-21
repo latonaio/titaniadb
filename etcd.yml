@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: titaniadb
+  name: titaniadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: titaniadb
+  template:
+    metadata:
+      labels:
+        run: titaniadb
+    spec:
+      containers:
+      - name: titaniadb
+        imagePullPolicy: IfNotPresent
+        image: k8s.gcr.io/etcd:3.4.3-0
+        command:
+        - etcd
+        - --name=titaniadb
+        - --advertise-client-urls=http://0.0.0.0:2379
+        - --data-dir=/etcd-data
+        - --initial-advertise-peer-urls=http://0.0.0.0:2380
+        - --initial-cluster=titaniadb=http://0.0.0.0:2380
+        - --listen-client-urls=http://0.0.0.0:2379
+        - --listen-peer-urls=http://0.0.0.0:2380
+        ports:
+          - containerPort: 2379
+        volumeMounts:
+          - name: data
+            mountPath: /etcd-data
+      volumes:
+        - name: data
+          hostPath:
+            path: /mnt/etc-data
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: titaniadb
+  name: titaniadb
+spec:
+  selector:
+    run: titaniadb
+  type: NodePort
+  ports:
+    - port: 2379
+      targetPort: 2379
+      nodePort: 30079
