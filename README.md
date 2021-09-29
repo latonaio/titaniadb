@@ -1,6 +1,7 @@
 # titaniadb
-titaniadbは、高速で高可用性が特徴の分散型KVSであるetcdをラップした、AION独自のデータストアです。
-Kubernetes上で動作するAIONエコシステムと協調するようになっています。
+titaniadbは、高速で高可用性が特徴の分散型KVSであるetcdをラップした、主にエッジコンピューティングのためのデータストアです。
+Kubernetes上で動作するAIONエコシステムと協調するようになっています。  
+![titaniadb](Documents/titaniadb_architecture2.PNG)
 
 # etcdについて
 ## 概要
@@ -22,14 +23,7 @@ etcdをCUIで操作するには下記の2通りの手段があります。
 curlを使用すると、一般的なHTTPリクエストと同じ形式でデータの操作が可能です。
 
 ## etcdctlのインストール
-### 動作環境
-以下では次の動作環境を仮定しています。他の環境の場合は対応箇所を適宜変更してください。
-
-- CPU: arm64
-
-- OS: Linux
-### 1.インストール方法
-お使いのCPUとOSをご確認の上実行してください。
+### インストール方法
 ```
 ETCD_VERSION=${ETCD_VERSION:-v3.3.1}
 curl -L https://github.com/coreos/etcd/releases/download/$ETCD_VERSION/etcd-$ETCD_VERSION-linux-arm64.tar.gz -o etcd-$ETCD_VERSION-linux-arm64.tar.gz
